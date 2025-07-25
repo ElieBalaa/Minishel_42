@@ -1,0 +1,49 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc_extra.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/14 15:00:00 by oiskanda          #+#    #+#             */
+/*   Updated: 2025/07/25 21:16:30 by oiskanda         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
+
+int	is_originally_quoted(const char *delimiter)
+{
+	if (delimiter && delimiter[0] == '\'')
+		return (1);
+	return (0);
+}
+
+char	*read_heredoc_line(int is_piped)
+{
+	char	*line;
+	size_t	len;
+	ssize_t	read_result;
+
+	if (is_piped)
+	{
+		line = NULL;
+		len = 0;
+		read_result = getline(&line, &len, stdin);
+		if (read_result == -1)
+		{
+			free(line);
+			return (NULL);
+		}
+		if (line && line[read_result - 1] == '\n')
+			line[read_result - 1] = '\0';
+		return (line);
+	}
+	else
+	{
+		line = readline("> ");
+		if (!line)
+			return (NULL);
+		return (line);
+	}
+}

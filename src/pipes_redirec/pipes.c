@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eal-bala <eal-bala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 01:02:13 by omar-iskand       #+#    #+#             */
-/*   Updated: 2025/07/25 21:17:20 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 22:30:58 by eal-bala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	execute_pipeline(t_minishell *sh, t_ast *pipeline)
 	int			n;
 	t_pipe_ctx	c;
 
-	n = validate_pipeline(pipeline, &cmds);
+	n = validate_pipeline(pipeline, &cmds, sh);
 	if (!n)
 		return (1);
 	if (!setup_pipeline_context(&c, n, cmds))

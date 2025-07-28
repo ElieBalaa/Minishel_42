@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eal-bala <eal-bala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 21:13:23 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/28 16:17:54 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 22:31:55 by eal-bala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,7 +298,7 @@ char		*resolve_command_path(t_minishell *sh, const char *cmd);
 int			fork_and_execute(t_minishell *sh, const char *path,
 				char **argv, t_ast *node);
 int			setup_input_redirect(t_minishell *sh, t_ast *node);
-int			validate_pipeline(t_ast *pipeline, t_ast ***cmds);
+int			validate_pipeline(t_ast *pipeline, t_ast ***cmds, t_minishell *sh);
 int			setup_pipeline_context(t_pipe_ctx *c, int n, t_ast **cmds);
 int			handle_pipeline_error(t_ast **cmds, t_pipe_ctx *c);
 

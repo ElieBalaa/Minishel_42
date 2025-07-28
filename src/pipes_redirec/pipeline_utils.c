@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eal-bala <eal-bala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 01:02:13 by omar-iskand       #+#    #+#             */
-/*   Updated: 2025/07/25 21:17:20 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 22:30:18 by eal-bala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	validate_pipeline(t_ast *pipeline, t_ast ***cmds)
+int	validate_pipeline(t_ast *pipeline, t_ast ***cmds, t_minishell *sh)
 {
 	int	n;
 
 	n = flatten_pipeline(pipeline, cmds);
-	if (n <= 0 || preprocess_heredocs(*cmds, n, NULL))
+	if (n <= 0 || preprocess_heredocs(*cmds, n, sh))
 	{
 		if (*cmds)
 			free(*cmds);

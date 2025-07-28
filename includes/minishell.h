@@ -275,6 +275,9 @@ t_ast		*parse_segment(char **tokens, int n, t_minishell *sh);
 t_ast		*parse_line(const char *line, t_minishell *sh);
 t_ast		*init_ast_node(t_minishell *sh);
 int			is_pipeline_end(char **w, int i);
+t_ast		*process_pipeline_segment(t_pipeline_params params);
+int			count_till_pipe(char **words);
+t_ast		*handle_pipe_error(t_minishell *sh);
 
 /* expansion */
 char		*expand_vars(t_minishell *sh, const char *s);
@@ -295,6 +298,9 @@ char		*resolve_command_path(t_minishell *sh, const char *cmd);
 int			fork_and_execute(t_minishell *sh, const char *path,
 				char **argv, t_ast *node);
 int			setup_input_redirect(t_minishell *sh, t_ast *node);
+int			validate_pipeline(t_ast *pipeline, t_ast ***cmds);
+int			setup_pipeline_context(t_pipe_ctx *c, int n, t_ast **cmds);
+int			handle_pipeline_error(t_ast **cmds, t_pipe_ctx *c);
 
 /* heredoc */
 int			process_heredoc(t_minishell *sh, char *delimiter);
@@ -335,9 +341,18 @@ void		free_env_strings(char **env);
 int			env_set(t_minishell *sh, const char *str);
 void		env_unset(t_minishell *sh, const char *key);
 
+/* env utilities */
+int			print_env(char **env);
+char		**create_clean_env(t_minishell *sh);
+char		**add_env_var(t_minishell *sh, char **env, const char *var);
+int			execute_command(t_minishell *sh, char **env, char **cmd);
+
 /* utils */
 int			is_semicolon_error(char *token);
 void		shlvl(t_minishell *sh);
+void		set_initial_env_vars(t_minishell *sh);
+void		copy_env_vars(t_minishell *sh, char **envp, size_t n);
+char		*get_colored_prompt(t_minishell *sh);
 int			is_quoted(char *str);
 int			is_operator(char c);
 int			is_space(char c);
@@ -358,6 +373,7 @@ void		*ft_memcpy(void *dest, const void *src, size_t n);
 char		*process_quoted_delimiter(t_minishell *sh,
 				const char *start, int len);
 int			process_logical_operators(t_minishell *sh, char *line);
+char		*find_or_operator(char *line, int *is_or);
 
 /* garbage collector */
 int			gc_init(t_minishell *sh);

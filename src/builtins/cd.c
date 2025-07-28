@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eal-bala <eal-bala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 15:16:05 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/28 14:12:55 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 22:01:38 by eal-bala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,18 @@
 
 static char	*dst_path(t_minishell *sh, char **av, int *print)
 {
+	char	*home;
+
 	if (!av[1] || !ft_strcmp(av[1], "~") || !ft_strcmp(av[1], "--"))
-		return (get_env_var(sh, "HOME"));
+	{
+		home = get_env_var(sh, "HOME");
+		if (!home)
+		{
+			put_err("cd", "HOME not set");
+			return (NULL);
+		}
+		return (home);
+	}
 	if (!ft_strcmp(av[1], "-"))
 	{
 		*print = 1;

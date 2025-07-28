@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 19:57:57 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/25 21:17:31 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 20:18:37 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ void	free_ast(t_ast *node)
 		free(node->heredoc_delims);
 	}
 	free(node->input);
-	free(node->output);
-	free(node->heredoc_delims);
 	free_ast(node->left);
 	free_ast(node->right);
 	free(node);

@@ -36,6 +36,7 @@ int	classify_exec_error(const char *path)
 void	exec_node(t_minishell *sh, t_ast *node)
 {
 	char	*path;
+	char	*underscore_entry;
 	int		code;
 
 	if (!node->cmd || !node->cmd[0])
@@ -44,7 +45,11 @@ void	exec_node(t_minishell *sh, t_ast *node)
 		exit(execute_builtin(sh, node->cmd));
 	path = resolve_command_path(sh, node->cmd[0]);
 	if (path)
+	{
+		underscore_entry = gc_strjoin(sh, "_=", path);
+		env_set(sh, underscore_entry);
 		execve(path, node->cmd, sh->env);
+	}
 	code = classify_exec_error(path);
 	write(2, "minishell: ", 11);
 	write(2, node->cmd[0], ft_strlen(node->cmd[0]));

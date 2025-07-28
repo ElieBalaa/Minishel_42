@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:00:00 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/01/14 15:00:00 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 20:56:46 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,30 +21,12 @@ static void	execute_logical_commands(t_minishell *sh, char *first_cmd,
 		process_line(sh, second_cmd);
 }
 
-static char	*find_logical_operator(char *line, int *is_or)
-{
-	char	*or_pos;
-	char	*and_pos;
-
-	or_pos = strstr(line, " || ");
-	and_pos = strstr(line, " && ");
-	if (!or_pos && !and_pos)
-		return (NULL);
-	if (or_pos && (!and_pos || or_pos < and_pos))
-	{
-		*is_or = 1;
-		return (or_pos);
-	}
-	*is_or = 0;
-	return (and_pos);
-}
-
 int	process_logical_operators(t_minishell *sh, char *line)
 {
 	char	*split_pos;
 	int		is_or;
 
-	split_pos = find_logical_operator(line, &is_or);
+	split_pos = find_or_operator(line, &is_or);
 	if (!split_pos)
 		return (0);
 	*split_pos = '\0';

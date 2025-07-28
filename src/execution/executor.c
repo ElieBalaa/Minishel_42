@@ -47,14 +47,17 @@ static int	parent_builtin(char *s)
 
 static int	run_parent_builtin(t_minishell *sh, t_ast *n)
 {
-	int	in;
-	int	out;
+	int		in;
+	int		out;
+	char	*underscore_entry;
 
 	in = dup(STDIN_FILENO);
 	out = dup(STDOUT_FILENO);
 	if (apply_redirections(n))
 		return (sh->last_exit = 1, dup2(in, 0),
 			dup2(out, 1), close(in), close(out), 1);
+	underscore_entry = gc_strjoin(sh, "_=", n->cmd[0]);
+	env_set(sh, underscore_entry);
 	sh->last_exit = execute_builtin(sh, n->cmd);
 	dup2(in, 0);
 	dup2(out, 1);

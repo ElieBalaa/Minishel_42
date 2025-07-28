@@ -22,6 +22,7 @@ LDLIBS    := -lreadline -lhistory -Llibft -lft
 SRCS      := main.c \
 			 src/pipes_redirec/pipes_utils.c \
 			 src/pipes_redirec/pipes.c \
+			 src/pipes_redirec/pipeline_utils.c \
 			 src/pipes_redirec/pipe_helpers.c \
 			 src/pipes_redirec/redirec_utils.c \
 			 src/pipes_redirec/redirections.c \
@@ -41,6 +42,7 @@ SRCS      := main.c \
              src/tokenizer/token.c \
              src/tokenizer/token_utils.c \
              src/tokenizer/token_helpers.c \
+             src/tokenizer/pipeline_helpers.c \
              src/tokenizer/token_heredoc.c \
              src/tokenizer/token_heredoc_helpers.c \
              src/tokenizer/token_redir.c \
@@ -48,6 +50,7 @@ SRCS      := main.c \
 			 src/builtins/cd.c \
 			 src/builtins/echo.c \
 			 src/builtins/env.c \
+			 src/builtins/env_utils.c \
 			 src/builtins/exit.c \
 			 src/builtins/unset.c \
 			 src/builtins/export.c \
@@ -71,7 +74,10 @@ SRCS      := main.c \
              src/execution/path_resolver.c \
              src/utils/shell_utils.c \
              src/utils/logical_operators.c \
+             src/utils/logical_helpers.c \
              src/utils/init_shell.c \
+             src/utils/shell_repl.c \
+             src/utils/env_init.c \
              src/utils/cleanup_shell.c \
              src/utils/utils.c \
              src/utils/get_next_line.c
@@ -121,23 +127,9 @@ fclean: clean
 leaks: $(NAME)
 	@printf "$(CYAN)$(BOLD)Running memory leak detection...$(RESET)\n"
 	@printf "$(CYAN)$(BOLD)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(RESET)\n"
-	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) 2>&1 | tee leak_output.log
+	@valgrind --leak-check=full -q ./$(NAME) 2>&1 | tee leak_output.log
 	@printf "$(CYAN)$(BOLD)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(RESET)\n"
 
-norm:
-	@printf "$(BLUE)$(BOLD)Running norminette check...$(RESET)\n"
-	@printf "$(BLUE)$(BOLD)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(RESET)\n"
-	@norminette src includes 2>/dev/null | grep -E "(Error|Warning)" | wc -l | \
-	 (read count; if [ $$count -eq 0 ]; then \
-	   printf "$(GREEN)$(BOLD)Norminette: 0 violations found!$(RESET)\n"; \
-	 else \
-	   printf "$(RED)$(BOLD)Norminette: $$count violations found!$(RESET)\n"; \
-	   norminette src includes 2>/dev/null | grep -E "(Error|Warning)" || true; \
-	 fi)
-	@printf "$(BLUE)$(BOLD)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(RESET)\n\n"
-
-# bash:
-# 	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes bash
 
 re: fclean all
 

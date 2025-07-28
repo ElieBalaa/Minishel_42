@@ -29,7 +29,8 @@ int	env_set(t_minishell *sh, const char *str)
 			&& (sh->env[i][key_len] == '='
 			|| sh->env[i][key_len] == '\0'))
 		{
-			sh->env[i] = gc_strdup(sh, str);
+			free(sh->env[i]);
+			sh->env[i] = ft_strdup(str);
 			if (sh->env[i])
 				return (0);
 			else

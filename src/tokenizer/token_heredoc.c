@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 22:11:09 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/24 14:34:40 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 20:18:12 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,23 @@ void	process_heredoc_redir(t_minishell *sh, char **tok, int *i, t_ast *node)
 {
 	char	*clean_delim;
 
+	(void)sh;
+	if (!node)
+		return ;
 	(*i)++;
 	if (!tok[*i])
 		return ;
 	if (!node->heredoc_delims)
 	{
-		node->heredoc_delims = gc_malloc(sh, 2 * sizeof(char *));
+		node->heredoc_delims = malloc(2 * sizeof(char *));
 		if (is_quoted_delimiter(tok[*i]))
 		{
 			clean_delim = remove_quotes(tok[*i]);
-			node->heredoc_delims[0] = gc_strjoin(sh, "'", clean_delim);
+			node->heredoc_delims[0] = ft_strjoin("'", clean_delim);
 			free(clean_delim);
 		}
 		else
-			node->heredoc_delims[0] = gc_strdup(sh, tok[*i]);
+			node->heredoc_delims[0] = ft_strdup(tok[*i]);
 		node->heredoc_delims[1] = NULL;
 	}
 	else

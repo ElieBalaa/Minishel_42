@@ -74,15 +74,29 @@ void	free_env_strings(char **env)
 
 int	builtin_env(t_minishell *sh, char **argv)
 {
-	int	i;
+	char	**env;
+	int		i;
+	int		ignore_env;
 
-	i = 0;
-	(void)argv;
-	while (sh->env[i])
+	i = 1;
+	ignore_env = 0;
+	env = sh->env;
+	while (argv[i] && argv[i][0] == '-')
 	{
-		if (ft_strchr(sh->env[i], '='))
-			ft_putendl_fd(sh->env[i], 1);
-		++i;
+		if (!ft_strcmp(argv[i], "-i"))
+			ignore_env = 1;
+		else
+			return (put_err("env", "invalid option"), 1);
+		i++;
 	}
-	return (0);
+	if (ignore_env)
+		env = create_clean_env(sh);
+	while (argv[i] && ft_strchr(argv[i], '='))
+	{
+		env = add_env_var(sh, env, argv[i]);
+		i++;
+	}
+	if (!argv[i])
+		return (print_env(env));
+	return (execute_command(sh, env, &argv[i]));
 }

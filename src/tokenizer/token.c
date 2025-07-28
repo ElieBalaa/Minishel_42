@@ -28,7 +28,7 @@ static int	fill_segment_args(t_fill_args *args)
 		}
 		else
 		{
-			args->argv[arg_idx] = gc_strdup(args->sh, args->tokens[i]);
+			args->argv[arg_idx] = ft_strdup(args->tokens[i]);
 			arg_idx++;
 		}
 		i++;
@@ -41,7 +41,8 @@ t_ast	*init_ast_node(t_minishell *sh)
 {
 	t_ast	*ast;
 
-	ast = gc_malloc(sh, sizeof(t_ast));
+	(void)sh;
+	ast = malloc(sizeof(t_ast));
 	if (!ast)
 		return (NULL);
 	ast->cmd = NULL;
@@ -84,7 +85,7 @@ t_ast	*parse_segment(char **tokens, int n, t_minishell *sh)
 		return (handle_syntax_error(tokens, n, sh));
 	if (argc == 0)
 		return (NULL);
-	args.argv = gc_malloc(sh, sizeof(*args.argv) * (argc + 1));
+	args.argv = malloc(sizeof(*args.argv) * (argc + 1));
 	if (!args.argv)
 		return (NULL);
 	args = (t_fill_args){tokens, n, args.argv, node, sh};

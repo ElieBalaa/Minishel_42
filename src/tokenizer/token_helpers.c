@@ -22,7 +22,7 @@ int	count_till_pipe(char **words)
 	return (count);
 }
 
-static t_ast	*handle_pipe_error(t_minishell *sh)
+t_ast	*handle_pipe_error(t_minishell *sh)
 {
 	ft_putstr_fd("minishell:"
 		" syntax error near unexpected token `|'\n", STDERR_FILENO);
@@ -31,28 +31,21 @@ static t_ast	*handle_pipe_error(t_minishell *sh)
 	return (NULL);
 }
 
-static t_ast	*process_pipeline_segment(t_pipeline_params params)
+static t_ast	*process_pipeline_loop(t_pipeline_params params)
 {
-	t_ast	*pipe_node;
-
-	if (!params.words[*params.i + 1]
-		|| ft_strcmp(params.words[*params.i + 1], "|") == 0)
-		return (handle_pipe_error(params.sh));
-	if (!*params.node)
-		*params.node = parse_segment(params.words, *params.i, params.sh);
-	else
-		(*params.node)->right = parse_segment(params.words + *params.start,
-				*params.i - *params.start, params.sh);
-	if (!*params.node)
-		return (NULL);
-	*params.start = *params.i + 1;
-	pipe_node = init_ast_node(params.sh);
-	pipe_node->left = *params.node;
-	pipe_node->right = parse_segment(params.words + *params.start,
-			count_till_pipe(params.words + *params.start), params.sh);
-	if (!pipe_node->right)
-		return (NULL);
-	*params.node = pipe_node;
+	while (params.words[*params.i])
+	{
+		if (ft_strcmp(params.words[*params.i], "|") == 0)
+		{
+			if (!process_pipeline_segment(params))
+			{
+				if (*params.node)
+					free_ast(*params.node);
+				return (NULL);
+			}
+		}
+		(*params.i)++;
+	}
 	return (*params.node);
 }
 
@@ -69,15 +62,7 @@ t_ast	*parse_pipeline(char **words, t_minishell *sh)
 	if (words[0] && ft_strcmp(words[0], "|") == 0)
 		return (handle_pipe_error(sh));
 	params = (t_pipeline_params){words, &i, &start, &node, sh};
-	while (words[i])
-	{
-		if (ft_strcmp(words[i], "|") == 0)
-		{
-			if (!process_pipeline_segment(params))
-				return (NULL);
-		}
-		i++;
-	}
+	node = process_pipeline_loop(params);
 	if (!node)
 		node = parse_segment(words, i, sh);
 	return (node);

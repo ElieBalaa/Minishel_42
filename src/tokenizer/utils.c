@@ -67,7 +67,9 @@ int	quotes_balanced(const char *s)
 			++i;
 		++i;
 	}
-	return (!in_single && !in_double);
+	if (!in_single && !in_double)
+		return (1);
+	return (0);
 }
 
 char	*strip_surrounding_quotes(const char *str)

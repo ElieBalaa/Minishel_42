@@ -65,15 +65,12 @@ int	execute_pipeline(t_minishell *sh, t_ast *pipeline)
 	int			n;
 	t_pipe_ctx	c;
 
-	n = flatten_pipeline(pipeline, &cmds);
-	if (n <= 0 || preprocess_heredocs(cmds, n, sh))
+	n = validate_pipeline(pipeline, &cmds);
+	if (!n)
 		return (1);
-	if (alloc_pipes(&c, n - 1) < 0)
+	if (!setup_pipeline_context(&c, n, cmds))
 		return (perror("pipe"), 1);
-	c.pids = malloc(sizeof(pid_t) * n);
-	if (!c.pids)
-		return (free_pipes(&c), 1);
 	if (execute_commands(sh, cmds, n, &c))
-		return (1);
+		return (handle_pipeline_error(cmds, &c));
 	return (cleanup_and_wait(sh, &c, n, cmds));
 }

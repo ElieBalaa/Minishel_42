@@ -18,7 +18,8 @@ static char	**create_new_env(t_minishell *sh, const char *key, int old)
 	int		j;
 	char	**new;
 
-	new = gc_malloc(sh, sizeof(*new) * (old + 1));
+	(void)sh;
+	new = malloc(sizeof(*new) * (old + 1));
 	if (!new)
 		return (NULL);
 	i = 0;
@@ -28,7 +29,7 @@ static char	**create_new_env(t_minishell *sh, const char *key, int old)
 		if (!(ft_strncmp(sh->env[i], key, ft_strlen(key)) == 0
 				&& sh->env[i][ft_strlen(key)] == '='))
 		{
-			new[j] = gc_strdup(sh, sh->env[i]);
+			new[j] = ft_strdup(sh->env[i]);
 			j++;
 		}
 		i++;
@@ -40,13 +41,23 @@ static char	**create_new_env(t_minishell *sh, const char *key, int old)
 void	env_unset(t_minishell *sh, const char *key)
 {
 	int		old;
+	int		i;
 	char	**new;
+	char	**old_env;
 
 	old = env_count(sh->env);
 	new = create_new_env(sh, key, old);
 	if (!new)
 		return ;
+	old_env = sh->env;
 	sh->env = new;
+	i = 0;
+	while (old_env[i])
+	{
+		free(old_env[i]);
+		i++;
+	}
+	free(old_env);
 }
 
 int	builtin_unset(t_minishell *sh, char **args)

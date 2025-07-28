@@ -88,6 +88,7 @@ int	builtin_exit(t_minishell *sh, char **av)
 	if (sh->is_interactive)
 		ft_putendl_fd("exit", 1);
 	argc = count_exit_args(av);
+	cleanup_shell(sh);
 	if (argc == 1)
 		exit(sh->last_exit);
 	process_exit_with_arg(av, argc);

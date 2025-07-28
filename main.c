@@ -42,6 +42,7 @@ void	process_line(t_minishell *sh, char *line)
 	if (!ast)
 		return ;
 	sh->last_exit = execute_ast(sh, ast);
+	free_ast(ast);
 }
 
 static int	run_command_mode(t_minishell *sh, int ac, char **av)
@@ -62,7 +63,6 @@ int	main(int ac, char **av, char **envp)
 	setup_signals();
 	if (!run_command_mode(&sh, ac, av))
 		repl(&sh);
-	rl_clear_history();
-	gc_cleanup_all(&sh);
+	cleanup_shell(&sh);
 	return (sh.last_exit);
 }

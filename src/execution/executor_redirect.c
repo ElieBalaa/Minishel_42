@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:00:00 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/25 21:14:53 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 13:43:15 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	is_builtin(char *s)
 	return (!ft_strcmp(s, "echo") || !ft_strcmp(s, "cd")
 		|| !ft_strcmp(s, "pwd") || !ft_strcmp(s, "export")
 		|| !ft_strcmp(s, "unset") || !ft_strcmp(s, "env")
-		|| !ft_strcmp(s, "exit"));
+		|| !ft_strcmp(s, "exit") || !ft_strcmp(s, "."));
 }
 
 int	classify_exec_error(const char *path)

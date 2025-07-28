@@ -12,14 +12,51 @@
 
 #include "../../includes/minishell.h"
 
+static char	*create_display_path(t_minishell *sh, char *cwd)
+{
+	char	*home;
+	char	*display_path;
+
+	home = getenv("HOME");
+	if (home && ft_strncmp(cwd, home, ft_strlen(home)) == 0)
+	{
+		display_path = gc_malloc(sh, ft_strlen(cwd) - ft_strlen(home) + 2);
+		display_path[0] = '~';
+		ft_strcpy(display_path + 1, cwd + ft_strlen(home));
+	}
+	else
+		display_path = gc_strdup(sh, cwd);
+	return (display_path);
+}
+
+static char	*get_colored_prompt(t_minishell *sh)
+{
+	char	*cwd;
+	char	*display_path;
+	char	*temp;
+	char	*prompt;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		return (gc_strdup(sh, "🐚 mini-shell ➤ "));
+	display_path = create_display_path(sh, cwd);
+	temp = gc_strjoin(sh, "\033[1;36m🐚 \033[1;35mmini-shell\033[0m \033[1;33m",
+			display_path);
+	prompt = gc_strjoin(sh, temp, "\033[1;32m ➤ \033[0m");
+	free(cwd);
+	return (prompt);
+}
+
 void	repl(t_minishell *sh)
 {
 	char		*line;
+	char		*prompt;
 	static char	*last_line;
 
 	while (1)
 	{
-		line = readline("minishell> ");
+		prompt = get_colored_prompt(sh);
+		line = readline(prompt);
 		if (!line)
 		{
 			ft_putendl_fd("exit", 1);

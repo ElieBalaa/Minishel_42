@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 00:00:00 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/25 21:16:18 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/27 22:47:07 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,6 @@ static t_minishell	*g_shell_ctx = NULL;
 static void	cleanup_readline(void)
 {
 	rl_clear_history();
-	rl_cleanup_after_signal();
-	rl_deprep_terminal();
-	rl_reset_line_state();
-	rl_free_undo_list();
 }
 
 static void	gc_emergency_cleanup(int sig)

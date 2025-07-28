@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 15:31:25 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/25 19:01:49 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 14:08:16 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,18 @@ int	env_set(t_minishell *sh, const char *str)
 	return (extend_env_array(sh, str, i));
 }
 
+int	builtin_dot(t_minishell *sh, char **args)
+{
+	(void)sh;
+	if (!args[1])
+	{
+		ft_putstr_fd("minishell: .: filename argument required\n", 2);
+		ft_putstr_fd(".: usage: . filename [arguments]\n", 2);
+		return (2);
+	}
+	return (0);
+}
+
 int	execute_builtin(t_minishell *sh, char **args)
 {
 	if (!args || !args[0])
@@ -57,5 +69,7 @@ int	execute_builtin(t_minishell *sh, char **args)
 		return (builtin_export(sh, args));
 	if (!ft_strcmp(args[0], "unset"))
 		return (builtin_unset(sh, args));
+	if (!ft_strcmp(args[0], "."))
+		return (builtin_dot(sh, args));
 	return (-1);
 }

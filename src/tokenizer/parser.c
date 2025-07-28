@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 15:03:33 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/08 21:08:18 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/27 18:36:12 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,14 @@ char	**tok_to_array(t_minishell *sh, t_token *lst)
 t_ast	*parse_line(const char *line, t_minishell *sh)
 {
 	t_token	*tok;
+	t_token	*split_tok;
 	char	**words;
 
 	tok = tokenize(line, sh);
 	if (!tok)
 		return (NULL);
-	words = tok_to_array(sh, tok);
+	split_tok = apply_word_splitting(sh, tok);
+	words = tok_to_array(sh, split_tok);
 	if (!words)
 		return (NULL);
 	return (parse_pipeline(words, sh));

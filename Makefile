@@ -25,16 +25,18 @@ SRCS      := main.c \
 			 src/pipes_redirec/pipe_helpers.c \
 			 src/pipes_redirec/redirec_utils.c \
 			 src/pipes_redirec/redirections.c \
-             src/tokenizer/expansion.c \
-             src/tokenizer/expansion_heredoc.c \
-             src/tokenizer/expansion_helpers.c \
-             src/tokenizer/expansion_utils.c \
+             src/expansion/expansion.c \
+             src/expansion/expansion_heredoc.c \
+             src/expansion/expansion_helpers.c \
+             src/expansion/expansion_utils.c \
              src/tokenizer/parser.c \
              src/tokenizer/utils.c \
              src/tokenizer/clean_up.c \
-             src/tokenizer/lexer.c \
-             src/tokenizer/lexer_utils.c \
-             src/tokenizer/lexer_helpers.c \
+             src/tokenizer/word_splitting.c \
+             src/lexer/lexer.c \
+             src/lexer/lexer_utils.c \
+             src/lexer/lexer_helpers.c \
+             src/lexer/lexer_token_utils.c \
              src/tokenizer/escape_utils.c \
              src/tokenizer/token.c \
              src/tokenizer/token_utils.c \
@@ -62,7 +64,6 @@ SRCS      := main.c \
              src/heredoc/heredoc.c \
              src/heredoc/heredoc_utils.c \
              src/heredoc/heredoc_extra.c \
-             src/heredoc/heredoc_content.c \
              src/heredoc/heredoc_interactive.c \
              src/heredoc/heredoc_buffer.c \
              src/heredoc/heredoc_piped.c \
@@ -90,17 +91,16 @@ all: $(NAME)
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	@mkdir -p $(@D)
-	@echo "Compiling $<"
 	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 $(LIBFT_LIB):
-	@$(MAKE) -C $(LIBFT_DIR) 
+	@$(MAKE) -C $(LIBFT_DIR) --silent
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 $(NAME): $(OBJS) $(LIBFT_LIB)
-	@$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LDLIBS) -o $(NAME) 
+	@$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LDLIBS) -o $(NAME)
 	@printf "\n$(GREEN)$(BOLD)$(NAME) compiled successfully!$(RESET)\n"
 	@printf "$(GREEN)$(BOLD)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━$(RESET)\n"
 	@printf "$(GREEN)$(BOLD)Ready to execute: ./$(NAME)$(RESET)\n"
@@ -109,13 +109,13 @@ $(NAME): $(OBJS) $(LIBFT_LIB)
 clean:
 	@printf "$(YELLOW)Cleaning object files...$(RESET)\n"
 	@rm -rf $(OBJ_DIR) 2>/dev/null || true
-	@$(MAKE) -C $(LIBFT_DIR) clean > /dev/null 2>&1
+	@$(MAKE) -C $(LIBFT_DIR) clean --silent
 	@printf "$(GREEN)$(BOLD)Clean completed successfully!$(RESET)\n\n"
 
 fclean: clean
 	@printf "$(RED)Removing $(NAME) executable...$(RESET)\n"
 	@rm -f $(NAME) 2>/dev/null || true
-	@$(MAKE) -C $(LIBFT_DIR) fclean > /dev/null 2>&1
+	@$(MAKE) -C $(LIBFT_DIR) fclean --silent
 	@printf "$(GREEN)$(BOLD)Full clean completed successfully!$(RESET)\n\n"
 
 leaks: $(NAME)

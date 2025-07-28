@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 15:16:05 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/23 19:14:58 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 14:12:55 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,21 @@ static char	*dst_path(t_minishell *sh, char **av, int *print)
 int	update_env(t_minishell *sh, const char *old)
 {
 	char	buf[1024];
-	char	*tmp;
+	char	*tmp_old_pwd;
+	char	*tmp_pwd;
 
 	if (getcwd(buf, sizeof(buf)) == NULL)
 		return (put_err(NULL, "error retrieving current directory 3"), 0);
-	tmp = gc_strjoin(sh, "OLDPWD=", old);
-	env_set(sh, tmp);
-	tmp = gc_strjoin(sh, "PWD=", buf);
-	env_set(sh, tmp);
+	if (get_env_var(sh, "OLDPWD") != NULL)
+	{
+		tmp_old_pwd = gc_strjoin(sh, "OLDPWD=", old);
+		env_set(sh, tmp_old_pwd);
+	}
+	if (get_env_var(sh, "PWD") != NULL)
+	{
+		tmp_pwd = gc_strjoin(sh, "PWD=", buf);
+		env_set(sh, tmp_pwd);
+	}
 	return (1);
 }
 

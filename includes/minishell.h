@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 21:13:23 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/25 21:13:25 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 16:17:54 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,8 @@ typedef struct s_pipeline_params
 	t_minishell	*sh;
 }	t_pipeline_params;
 
+char		*handle_escaped_char_heredoc(t_minishell *sh,
+				const char *s, t_expansion *exp);
 int			validate_key(const char *key);
 void		process_input_redir(char **tok,
 				int *i, t_ast *node, t_minishell *sh);
@@ -334,6 +336,7 @@ int			env_set(t_minishell *sh, const char *str);
 void		env_unset(t_minishell *sh, const char *key);
 
 /* utils */
+int			is_semicolon_error(char *token);
 void		shlvl(t_minishell *sh);
 int			is_quoted(char *str);
 int			is_operator(char c);
@@ -386,8 +389,8 @@ void		finalize_content(char **content, char **temp_content,
 int			append_temp_content(char **temp_content, char *line,
 				size_t *temp_size, size_t *temp_capacity);
 int			find_last_delimiter_index(char **delimiters);
-int			process_content(t_minishell *sh, char **delimiters,
-				int *pipe_fd, char *full_input);
+int			process_content(t_minishell *sh, char **delimiters, int *pipe_fd,
+				int *quoted_flags);
 int			process_heredoc(t_minishell *sh, char *delimiter);
 int			resize_content_buffer(t_content_vars *vars);
 int			append_expanded_line(t_minishell *sh, char *line,
@@ -402,7 +405,6 @@ int			process_multiple_heredocs(t_minishell *sh, char **delimiters,
 				int *pipe_fd);
 
 /* token_heredoc.c */
-// void		process_heredoc_redir(char **tok, int *i, t_ast *node);
 void		process_heredoc_redir(t_minishell *sh,
 				char **tok, int *i, t_ast *node);
 char		*remove_quotes(char *str);
@@ -455,8 +457,15 @@ int			is_quoted_delimiter(char *delimiter);
 char		*get_clean_delimiter(char *delimiter);
 int			heredoc_expand_variables(t_minishell *sh, char **content);
 
-// Carl
 void		ignore_signals(void);
 void		setup_signals(void);
+
+/* word splitting */
+t_token		*split_unquoted_token(t_minishell *sh, t_token *token);
+t_token		*apply_word_splitting(t_minishell *sh, t_token *tokens);
+
+/* lexer token utils */
+char		*process_token_content(t_minishell *sh, const char *start,
+				int len, int is_heredoc_delim);
 
 #endif

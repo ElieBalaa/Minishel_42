@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 22:07:38 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/25 21:14:31 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 14:23:54 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ static char	*get_export_key(t_minishell *sh, const char *arg)
 	size_t	len;
 	char	*key;
 
+	(void)sh;
 	len = 0;
 	while (arg[len] && arg[len] != '=')
 		len++;
-	key = gc_malloc(sh, len + 1);
+	key = malloc(len + 1);
 	if (!key)
 		return (NULL);
 	ft_memcpy(key, arg, len);

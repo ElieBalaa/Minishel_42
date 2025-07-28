@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:12:42 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/25 21:19:02 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 13:38:21 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int	main(int ac, char **av, char **envp)
 	setup_signals();
 	if (!run_command_mode(&sh, ac, av))
 		repl(&sh);
+	rl_clear_history();
 	gc_cleanup_all(&sh);
 	return (sh.last_exit);
 }

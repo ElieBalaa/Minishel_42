@@ -6,7 +6,7 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 20:00:00 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/22 18:00:04 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 15:06:10 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int	count_args(char **tok, int n)
 	cnt = 0;
 	while (i < n && tok[i])
 	{
+		if (is_semicolon_error(tok[i]))
+			return (-1);
 		if (is_redir(tok[i]))
 		{
 			if (i + 1 >= n || !tok[i + 1] || is_redir(tok[i + 1]))
-			{
 				return (-1);
-			}
 			i += 2;
 		}
 		else

@@ -6,12 +6,26 @@
 /*   By: oiskanda <oiskanda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 14:18:34 by oiskanda          #+#    #+#             */
-/*   Updated: 2025/07/25 21:17:59 by oiskanda         ###   ########.fr       */
+/*   Updated: 2025/07/28 16:17:21 by oiskanda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include <string.h>
+
+static int	has_dollar_sign(const char *start, int len)
+{
+	int	i;
+
+	i = 0;
+	while (i < len)
+	{
+		if (start[i] == '$')
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 static int	check_heredoc_delimiter(t_token **lst)
 {
@@ -25,48 +39,24 @@ static int	check_heredoc_delimiter(t_token **lst)
 	return (0);
 }
 
-static char	*process_heredoc_token(t_minishell *sh, const char *start, int len)
-{
-	char	*raw;
-	char	*expd;
-
-	raw = gc_strndup(sh, start, len);
-	if (len >= 2 && ((start[0] == '\'' && start[len - 1] == '\'')
-			|| (start[0] == '"' && start[len - 1] == '"')))
-		return (process_quoted_delimiter(sh, start, len));
-	expd = expand_vars(sh, raw);
-	return (expd);
-}
-
-static char	*process_regular_token(t_minishell *sh, const char *start, int len)
-{
-	char	*raw;
-	char	*expd;
-
-	raw = gc_strndup(sh, start, len);
-	expd = expand_vars(sh, raw);
-	return (expd);
-}
-
 void	add_tok(t_token **lst, t_minishell *sh, const char *start, int len)
 {
 	t_token	*node;
 	char	*text;
 	int		is_heredoc_delim;
 	int		was_quoted;
+	int		has_expansion;
 
 	is_heredoc_delim = check_heredoc_delimiter(lst);
-	was_quoted = (len >= 2 && ((start[0] == '"' && start[len - 1] == '"')
-				|| (start[0] == '\'' && start[len - 1] == '\'')));
-	if (is_heredoc_delim)
-		text = process_heredoc_token(sh, start, len);
-	else
-		text = process_regular_token(sh, start, len);
+	was_quoted = (len >= 2 && ((start[0] == '\'' && start[len - 1] == '\'')
+				|| (start[0] == '"' && start[len - 1] == '"')));
+	has_expansion = (!was_quoted && has_dollar_sign(start, len));
+	text = process_token_content(sh, start, len, is_heredoc_delim);
 	if (!text || (!*text && !was_quoted))
 		return ;
 	node = gc_malloc(sh, sizeof(*node));
 	node->text = text;
-	node->quoted = was_quoted;
+	node->quoted = was_quoted || !has_expansion;
 	node->next = NULL;
 	if (!*lst)
 		*lst = node;

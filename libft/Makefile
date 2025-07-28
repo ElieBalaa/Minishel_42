@@ -27,8 +27,8 @@ BONUS_OBJ = $(BONUS_SRC:.c=.o)
 
 CC      = cc
 CFLAGS  = -Wall -Wextra -Werror
-AR      = ar rcs
-RM      = rm -f
+AR      = @ar rcs
+RM      = @rm -f
 
 all: $(NAME)
 

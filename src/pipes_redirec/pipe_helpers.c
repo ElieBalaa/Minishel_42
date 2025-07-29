@@ -34,7 +34,7 @@ void	fill_cmds(t_ast *n, t_ast **arr, int *idx)
 	fill_cmds(n->right, arr, idx);
 }
 
-int	flatten_pipeline(t_ast *root, t_ast ***out)
+int	flatten_pipeline(t_ast *root, t_ast ***out, t_minishell *sh)
 {
 	int	count;
 	int	i;
@@ -44,7 +44,7 @@ int	flatten_pipeline(t_ast *root, t_ast ***out)
 	count = count_cmds(root);
 	if (count <= 0)
 		return (0);
-	*out = malloc(sizeof(t_ast *) * count);
+	*out = gc_malloc(sh, sizeof(t_ast *) * count);
 	if (!*out)
 		return (-1);
 	i = 0;

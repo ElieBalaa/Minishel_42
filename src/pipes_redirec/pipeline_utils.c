@@ -16,7 +16,7 @@ int	validate_pipeline(t_ast *pipeline, t_ast ***cmds, t_minishell *sh)
 {
 	int	n;
 
-	n = flatten_pipeline(pipeline, cmds);
+	n = flatten_pipeline(pipeline, cmds, sh);
 	if (n <= 0 || preprocess_heredocs(*cmds, n, sh))
 	{
 		if (*cmds)

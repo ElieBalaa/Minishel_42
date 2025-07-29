@@ -242,7 +242,7 @@ int			extend_env_array(t_minishell *sh, const char *str, int i);
 int			env_set(t_minishell *sh, const char *str);
 void		fill_cmds(t_ast *n, t_ast **arr, int *idx);
 int			count_cmds(t_ast *n);
-int			flatten_pipeline(t_ast *root, t_ast ***out);
+int			flatten_pipeline(t_ast *root, t_ast ***out, t_minishell *sh);
 char		*handle_char(t_minishell *sh, const char s, char *res);
 char		*handle_dollar(t_minishell *sh,
 				const char *s, size_t *i, char *res);

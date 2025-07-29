@@ -35,7 +35,6 @@ SRCS      := main.c \
              src/tokenizer/clean_up.c \
              src/tokenizer/word_splitting.c \
              src/lexer/lexer.c \
-             src/lexer/lexer_utils.c \
              src/lexer/lexer_helpers.c \
              src/lexer/lexer_token_utils.c \
              src/tokenizer/escape_utils.c \
@@ -67,16 +66,13 @@ SRCS      := main.c \
              src/heredoc/heredoc.c \
              src/heredoc/heredoc_utils.c \
              src/heredoc/heredoc_extra.c \
-             src/heredoc/heredoc_interactive.c \
              src/heredoc/heredoc_buffer.c \
              src/heredoc/heredoc_piped.c \
-             src/heredoc/heredoc_vars.c \
              src/execution/path_resolver.c \
              src/utils/shell_utils.c \
              src/utils/logical_operators.c \
              src/utils/logical_helpers.c \
              src/utils/init_shell.c \
-             src/utils/shell_repl.c \
              src/utils/env_init.c \
              src/utils/cleanup_shell.c \
              src/utils/utils.c \

@@ -47,3 +47,14 @@ char	*read_heredoc_line(int is_piped)
 		return (line);
 	}
 }
+
+int	init_heredoc_vars(char **delimiters, int *i, int *last_index,
+		int *is_piped)
+{
+	*i = 0;
+	*last_index = find_last_delimiter_index(delimiters);
+	if (*last_index < 0)
+		return (-1);
+	*is_piped = !isatty(STDIN_FILENO);
+	return (0);
+}

@@ -84,3 +84,11 @@ t_token	*tokenize(const char *line, t_minishell *sh)
 	}
 	return (lst);
 }
+
+char	*process_quoted_delimiter(t_minishell *sh, const char *start, int len)
+{
+	char	*clean;
+
+	clean = gc_strndup(sh, start + 1, len - 2);
+	return (gc_strjoin(sh, "'", clean));
+}

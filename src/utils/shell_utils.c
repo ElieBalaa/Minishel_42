@@ -40,3 +40,30 @@ int	status_code(int wstatus)
 		return (128 + WTERMSIG(wstatus));
 	return (wstatus);
 }
+
+void	repl(t_minishell *sh)
+{
+	char		*line;
+	static char	*last_line;
+
+	while (1)
+	{
+		line = readline("minishell> ");
+		if (!line)
+		{
+			ft_putendl_fd("exit", 1);
+			break ;
+		}
+		if (*line)
+			process_line(sh, line);
+		if (!last_line)
+			add_history(line);
+		if (*line && last_line)
+		{
+			if (ft_strcmp(line, last_line) != 0)
+				add_history(line);
+		}
+		last_line = gc_strdup(sh, line);
+		free(line);
+	}
+}

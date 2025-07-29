@@ -308,14 +308,10 @@ int			process_multiple_heredocs(t_minishell *sh, char **delimiters,
 				int *pipe_fd);
 char		*read_heredoc_line(int is_piped);
 int			check_delimiter_match(char *line, char *delimiter);
-int			handle_interactive_loop(char **content, char *delimiter,
-				int is_last, int is_piped);
 int			handle_heredoc_loop(t_minishell *sh, char *delimiter,
 				int *pipe_fd, int is_piped);
 int			process_piped_content(char **content, char **current_pos,
 				char *delimiter);
-int			process_interactive_content(char **content, char *delimiter,
-				int is_last, int is_piped);
 
 /* builtins */
 int			update_env(t_minishell *sh, const char *old);

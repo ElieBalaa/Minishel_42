@@ -14,13 +14,10 @@
 
 void	cleanup_shell(t_minishell *sh)
 {
-	int	i;
-
+	if (!sh || sh->cleaned_up)
+		return ;
+	sh->cleaned_up = 1;
 	gc_cleanup_all(sh);
 	if (sh->is_interactive)
 		rl_clear_history();
-	i = 0;
-	while (sh->env[i])
-		free(sh->env[i++]);
-	free(sh->env);
 }

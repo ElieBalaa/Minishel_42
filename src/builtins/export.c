@@ -15,29 +15,20 @@
 int	extend_env_array(t_minishell *sh, const char *str, int i)
 {
 	char	**new_env;
-	char	**old_env;
 	int		j;
 
-	new_env = malloc(sizeof(char *) * (i + 2));
+	new_env = gc_malloc(sh, sizeof(char *) * (i + 2));
 	if (!new_env)
 		return (1);
 	j = 0;
 	while (j < i)
 	{
-		new_env[j] = ft_strdup(sh->env[j]);
+		new_env[j] = gc_strdup(sh, sh->env[j]);
 		++j;
 	}
-	new_env[i] = ft_strdup(str);
+	new_env[i] = gc_strdup(sh, str);
 	new_env[i + 1] = NULL;
-	old_env = sh->env;
 	sh->env = new_env;
-	j = 0;
-	while (old_env[j])
-	{
-		free(old_env[j]);
-		j++;
-	}
-	free(old_env);
 	return (0);
 }
 

@@ -35,14 +35,8 @@ static char	*handle_invalid_var_case(t_minishell *sh, const char *p, int *adv)
 
 static char	*handle_exit_status_case(t_minishell *sh, int *adv)
 {
-	char	*temp_val;
-	char	*val;
-
 	*adv = 1;
-	temp_val = ft_itoa(sh->last_exit);
-	val = gc_strdup(sh, temp_val);
-	free(temp_val);
-	return (val);
+	return (gc_strdup(sh, "$$EXIT_STATUS$$"));
 }
 
 static char	*handle_special_cases(t_minishell *sh, const char *p, int *adv)

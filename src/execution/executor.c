@@ -11,6 +11,29 @@
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <string.h>
+
+static void	expand_exit_status_markers(t_minishell *sh, char **args)
+{
+	int		i;
+	char	*temp_val;
+	char	*val;
+
+	if (!args)
+		return ;
+	i = 0;
+	while (args[i])
+	{
+		if (strstr(args[i], "$$EXIT_STATUS$$"))
+		{
+			temp_val = ft_itoa(sh->last_exit);
+			val = gc_strdup(sh, temp_val);
+			free(temp_val);
+			args[i] = val;
+		}
+		i++;
+	}
+}
 
 int	fork_and_execute(t_minishell *sh, const char *p, char **a, t_ast *n)
 {
@@ -19,6 +42,7 @@ int	fork_and_execute(t_minishell *sh, const char *p, char **a, t_ast *n)
 
 	(void)p;
 	(void)a;
+	expand_exit_status_markers(sh, n->cmd);
 	pid = fork();
 	if (pid < 0)
 		return (perror("fork"), 1);
@@ -56,6 +80,7 @@ static int	run_parent_builtin(t_minishell *sh, t_ast *n)
 	if (apply_redirections(n))
 		return (sh->last_exit = 1, dup2(in, 0),
 			dup2(out, 1), close(in), close(out), 1);
+	expand_exit_status_markers(sh, n->cmd);
 	underscore_entry = gc_strjoin(sh, "_=", n->cmd[0]);
 	env_set(sh, underscore_entry);
 	sh->last_exit = execute_builtin(sh, n->cmd);

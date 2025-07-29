@@ -19,7 +19,7 @@ void	copy_env_vars(t_minishell *sh, char **envp, size_t n)
 	i = 0;
 	while (i < n)
 	{
-		sh->env[i] = ft_strdup(envp[i]);
+		sh->env[i] = gc_strdup(sh, envp[i]);
 		if (!sh->env[i])
 		{
 			gc_cleanup_all(sh);

@@ -45,28 +45,10 @@ void	ft_free_split(char **str)
 
 void	free_ast(t_ast *node)
 {
-	int	i;
-
 	if (!node)
 		return ;
-	if (node->cmd)
-	{
-		i = 0;
-		while (node->cmd[i])
-			free(node->cmd[i++]);
-		free(node->cmd);
-	}
-	if (node->heredoc_delims)
-	{
-		i = 0;
-		while (node->heredoc_delims[i])
-			free(node->heredoc_delims[i++]);
-		free(node->heredoc_delims);
-	}
-	free(node->input);
 	free_ast(node->left);
 	free_ast(node->right);
-	free(node);
 }
 
 void	free_toklist(t_token *lst)

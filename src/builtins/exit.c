@@ -75,7 +75,7 @@ static void	process_exit_with_arg(char **av, int argc)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		free(arg);
-		return ;
+		exit(1);
 	}
 	free(arg);
 	exit((unsigned char)val);
@@ -88,7 +88,6 @@ int	builtin_exit(t_minishell *sh, char **av)
 	if (sh->is_interactive)
 		ft_putendl_fd("exit", 1);
 	argc = count_exit_args(av);
-	cleanup_shell(sh);
 	if (argc == 1)
 		exit(sh->last_exit);
 	process_exit_with_arg(av, argc);

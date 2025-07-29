@@ -54,7 +54,7 @@ static void	init_environment(t_minishell *sh, char **envp)
 	n = 0;
 	while (envp[n])
 		n++;
-	sh->env = malloc(sizeof(char *) * (n + 10));
+	sh->env = gc_malloc(sh, sizeof(char *) * (n + 10));
 	if (!sh->env)
 	{
 		gc_cleanup_all(sh);
@@ -74,6 +74,7 @@ void	init_minishell(t_minishell *sh, char **envp)
 	sh->is_interactive = isatty(STDIN_FILENO);
 	sh->child_pid = -1;
 	sh->heredoc_active = 0;
+	sh->cleaned_up = 0;
 	set_initial_env_vars(sh);
 	shlvl(sh);
 }

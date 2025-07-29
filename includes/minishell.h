@@ -81,6 +81,7 @@ typedef struct s_minishell
 	int					is_interactive;
 	int					child_pid;
 	int					heredoc_active;
+	int					cleaned_up;
 	t_simple_gc			gc;
 }	t_minishell;
 
